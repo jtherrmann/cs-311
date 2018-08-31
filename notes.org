@@ -1,0 +1,76 @@
+* Week 1
+** 8/29
+*** overloading
+Overloading means to use the same name for two things. In the case of operator
+overloading, it means to re-define standard operators for new types.
+
+*** arity
+The arity of an operator is its number of operands.
+
+*** global vs. member overloaded operators
+Operators overloaded as global functions take two parameters, the first and
+second operands. Operators overloaded as member functions take one parameter,
+the second operand, and treat the current object (*this) as the
+first operand.
+
+Two good reasons not to implement an operator as a member function (to
+implement it globally) are:
+1. You need implicit type conversion on the first operand.
+2. You need to allow the first operand to be an instance of a class that you did
+   not write (e.g. stream insertion << and stream extraction >> operators).
+   
+*** invisible functions and the Big Five
+Invisible member functions are class member functions that the compiler
+automatically writes for you. Six invisible member functions are the default
+constructor (ctor) and the Big Five:
+1. destructor (dctor)
+2. copy ctor
+3. copy assignment operator
+4. move ctor
+5. move assignment operator
+   
+TODO: example of an invisible function
+
+A default constructor is a constructor with no parameters.
+
+An assignment operator is an operator that creates an Lvalue (?) / assigns a
+value to some name. A copy or move assignment operator is used when both
+operands have the same type.
+
+The copy and move constructors both take one parameter of the same type as the
+object being constructed.
+
+The copy constructor and copy assignment operator both take the object as
+reference-to-const and cannot modify it in the process of creating the new
+object. The move constructor and move assignment operator both take the object
+as Rvalue reference and can modify/wreck it in the process of creating the new
+object.
+
+If only the copy ctor exists, it gets both Lvalues and Rvalues. If the move
+ctor exists, it gets Rvalues while the copy ctor gets Lvalues. The move ctor is
+allowed to modify/wreck the passed object in the process of creating the new
+object, allowing it to be faster, while the copy ctor must copy the passed
+object in order to create the new object, which makes it slower.
+
+So the move constructor/assignment probably (destructively?) move resources
+from the passed object to the new object (and shallow copy)? While the copy
+constructor/assignment probably recursively copy the resources from the passed
+object the new object (a deep copy)?
+
+The default ctor is automatically generated when you declare no ctors. Each of
+the Big Five is automatically generated when:
+1. dctor: when you do not declare it
+2. copy ctor/assignment: when you do not declare it and (C++ 14) you do not
+   declare move ctor or assignment
+3. move ctor/assignment: when you do not declare any of the Big Five
+
+Also, all of these can only be automatically generated if all of the members
+have the corresponding public function; e.g. a class can only have an
+automatically generated copy ctor if all of its member variables have public
+copy ctors
+
+Example of an automatically generated default ctor:
+
+Public:
+    Person():_name(), _age()
+    {}
