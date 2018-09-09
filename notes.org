@@ -74,3 +74,8 @@ Example of an automatically generated default ctor:
 Public:
     Person():_name(), _age()
     {}
+
+* Project 1
+const functions:
+https://stackoverflow.com/a/5973485
+https://www.geeksforgeeks.org/const-member-functions-c/
