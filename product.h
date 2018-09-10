@@ -9,6 +9,9 @@
 // TODO: include string again in header file and move to_string comment to there?
 #include <string>  // std::string, std::to_string
 
+// TODO: include ostream again in header file?
+#include <ostream>  // std::ostream
+
 class Product {
 
 public:
@@ -39,8 +42,20 @@ public:
 
     std::string toString() const;
 
-    bool operator==(const Product & other);
-    bool operator!=(const Product & other);
+    bool operator==(const Product & other) const;
+    bool operator!=(const Product & other) const;
+
+    // TODO: pre
+    Product & operator++();
+
+    // TODO: post
+    Product operator++(int dummy);
+
+    // TODO: pre
+    Product & operator--();
+
+    // TODO: post
+    Product operator--(int dummy);
 	
 
 private:
@@ -48,7 +63,10 @@ private:
     std::string _name;
     int _items;
 
-};
+};  // End class Product.
+
+
+std::ostream & operator<<(std::ostream & out, const Product & p);
 
 
 #endif  //#ifndef FILE_PRODUCT_H_INCLUDED

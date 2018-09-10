@@ -51,4 +51,49 @@ int main() {
 
     cout << "p2 != p4: " << 0 << endl;
     cout << (p2 != p4) << endl;
+
+    cout << endl;
+    
+    // Product pen("pen", 5);
+    // Product pensame = ++pen;
+
+    // cout << 6 << 6 << endl;
+    // cout << pen.toString() << endl;
+    // cout << pensame.toString() << endl;
+
+    // Product pen2("pen", 5);
+    // Product penlag = pen2++;
+    
+    // cout << 6 << 5 << endl;
+    // cout << pen2.toString() << endl;
+    // cout << penlag.toString() << endl;
+
+    Product pen("pen", 5);
+    Product pensame = --pen;
+
+    cout << 4 << 4 << endl;
+    cout << pen.toString() << endl;
+    cout << pensame.toString() << endl;
+
+    Product pen2("pen", 5);
+    Product penlag = pen2--;
+    
+    cout << 4 << 5 << endl;
+    cout << pen2.toString() << endl;
+    cout << penlag.toString() << endl;
+
+    Product empty("empty", 1);
+
+    cout << 1 << 0 << 0 << endl;
+    cout << empty.toString() << endl;
+    --empty;
+    cout << empty.toString() << endl;
+    --empty;
+    cout << empty.toString() << endl;
+
+    cout << endl;
+
+    Product b("bottle", 3);
+    cout << b.toString() << endl;
+    cout << b << endl;
 }
