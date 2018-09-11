@@ -1,19 +1,19 @@
 #include "product.h"
 
-void Product::setName(std::string name) {
-    _name = name;
-}
-
-void Product::setInventory(int items) {
-    _items = items;
-}
-
 std::string Product::getName() const {
     return _name;
 }
 
 int Product::getInventory() const {
     return _items;
+}
+
+void Product::setName(std::string name) {
+    _name = name;
+}
+
+void Product::setInventory(int items) {
+    _items = items;
 }
 
 bool Product::empty() const {

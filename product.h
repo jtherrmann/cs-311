@@ -32,11 +32,11 @@ public:
     Product & operator=(const Product & other) = default;
     Product & operator=(Product && other) = default;
 
-    void setName(std::string name);
-    void setInventory(int items);
-
     std::string getName() const;
     int getInventory() const;
+
+    void setName(std::string name);
+    void setInventory(int items);
 
     bool empty() const;
 
