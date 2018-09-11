@@ -21,6 +21,8 @@ public:
 
     Product(): _name(""), _items(0) {}
 
+    // TODO: Project 1 "Other Requirements"; # of items cannot be negative;
+    // class invariant, or pre-condition here?
     Product(std::string name, int items) {
     	setName(name);
     	setInventory(items);
