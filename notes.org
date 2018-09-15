@@ -79,3 +79,9 @@ Public:
 const functions:
 https://stackoverflow.com/a/5973485
 https://www.geeksforgeeks.org/const-member-functions-c/
+* Project 2
+- iterators from pointers:
+  https://www.cs.northwestern.edu/~riesbeck/programming/c++/stl-iterator-define.html
+* misc
+- show paths of include files: ~gcc -M main.c~ or ~g++ -M main.cpp~
+  - https://stackoverflow.com/a/5835035
