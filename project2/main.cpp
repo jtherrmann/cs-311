@@ -37,4 +37,39 @@ int main() {
     // vector<int> v {0, 1, 2, 3, 4};
     // cout << *(begin(v)+1) << endl;
     // cout << *(v.begin()) << endl;
+
+    cout << endl;
+
+    cout << "< test:" << endl;
+
+    SSArray<int> a1;
+    a1[2] = 3;
+
+    SSArray<int> a2;
+
+    cout << 1 << endl;
+    cout << (a1 > a2) << endl;
+
+    // cout << 0 << endl;
+    // cout << (a1 == a2) << endl;
+
+    // a2[2] = 3;
+    // cout << 1 << endl;
+    // cout << (a1 == a2) << endl;
+
+    cout << endl;
+
+    SSArray<int> mut;
+    // mut[0] = 3;
+    auto it = mut.begin();
+    *it = 3;
+    cout << mut[0] << endl;
+
+    const SSArray<int> immut;
+    // immut[0] = 3;
+    auto it2 = immut.begin();
+    // *it2 = 3;
+    cout << immut[0] << endl;
+
+    return 0;
 }
