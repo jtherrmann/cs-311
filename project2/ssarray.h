@@ -8,8 +8,16 @@
 #ifndef FILE_SSARRAY_H_INCLUDED
 #define FILE_SSARRAY_H_INCLUDED
 
+// TODO: remove
+#include <iostream>
+using std::cout;
+using std::endl;
+
 #include <algorithm>
+using std::copy;
 using std::equal;
+using std::fill;
+using std::swap;
 
 #include <cstddef>
 using std::size_t;
@@ -26,16 +34,61 @@ public:
 
     SSArray(): _size(8), _pointer(new value_type[_size]) {}
 
-    explicit SSArray(int size): _size(size), _pointer(new value_type[_size]) {}
+    explicit SSArray(int size)
+	:_size(size), _pointer(new value_type[_size])
+    {}
 
-    SSArray(int size, value_type item): _size(size), _pointer(new value_type[_size]) {
-	// TODO: std:fill? or is there some way to set all items to `item` just
-	// in the ctor initializers?
+    SSArray(int size, value_type value)
+	:_size(size), _pointer(new value_type[_size])
+    {
+	fill(begin(), end(), value);
     }
 
+    // dctor
     ~SSArray() {
 	delete [] _pointer;
     }
+
+    // copy ctor
+    SSArray(const SSArray & other)
+	:_size(other._size), _pointer(new value_type[_size])
+    {
+	// TODO: remove
+	cout << "COPY" << endl;
+	
+	copy(other.begin(), other.end(), begin());
+    }
+
+    // move ctor
+    SSArray(SSArray && other) noexcept
+    	:_size(other._size), _pointer(other._pointer)
+    {
+    	// TODO: remove
+    	cout << "MOVE" << endl;
+
+	other._pointer = nullptr;
+    }
+
+    // copy assign
+    SSArray & operator=(const SSArray & other) {
+	// TODO: remove
+	cout << "COPY ASSIGN" << endl;
+	
+	SSArray copy(other);
+	mswap(copy);
+	return *this;
+    }
+
+    // move assign
+    // TODO: test more
+    SSArray & operator=(SSArray && other) noexcept {
+	// TODO: remove
+	cout << "MOVE ASSIGN" << endl;
+	
+	mswap(other);
+	return * this;
+    }
+	
 
 public:
 
@@ -83,7 +136,7 @@ public:
 
 public:
 
-    value_type size() const {
+    size_type size() const {
 	return _size;
     }
     
@@ -107,6 +160,13 @@ private:
 
     size_type _size;
     value_type * _pointer;
+
+private:
+
+    void mswap(SSArray & other) noexcept {
+	swap(_size, other._size);
+	swap(_pointer, other._pointer);
+    }
 
 };
 

@@ -1,3 +1,6 @@
+#include <utility>
+using std::move;
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -68,8 +71,80 @@ int main() {
     const SSArray<int> immut;
     // immut[0] = 3;
     auto it2 = immut.begin();
+    cout << it2 << endl;
     // *it2 = 3;
     cout << immut[0] << endl;
+
+    cout << endl;
+
+    cout << "test copy ctor:" << endl << endl;
+
+    SSArray<int> orig;
+    for(int i = 0; i < orig.size(); ++i) {
+	orig[i] = i;
+    }
+
+    SSArray<int> copy(orig);
+
+    for(auto x : orig)
+	cout << x << endl;
+
+    cout << endl;
+
+    for(auto x : copy)
+	cout << x << endl;
+
+    cout << endl;
+
+    cout << 1 << endl;
+    cout << (orig == copy) << endl;
+
+    cout << endl;
+
+    cout << "test move ctor:" << endl << endl;
+    SSArray<int> movable(3);
+    SSArray<int> moved(move(movable));
+    movable.~SSArray();
+    for(auto x : moved)
+    	cout << x << endl;
+    // for(auto x : movable)
+    // 	cout << x << endl;
+
+    // SSArray<int> test;
+    // cout << test.begin() << endl;
+    // cout << *test.begin() << endl;
+    // test.begin() = nullptr;
+    // cout << test.begin() << endl;
+    // cout << *test.begin() << endl;
+
+    cout << endl;
+
+    cout << "test copy ctor:" << endl << endl;
+
+    SSArray<int> first(4);
+    first[0] = 2;
+    SSArray<int> second;
+    second = first;
+    first[0] = 1;
+    for(auto x : first)
+	cout << x << endl;
+    cout << endl;
+    for(auto x : second)
+	cout << x << endl;
+    // cout << (first == second) << endl;
+
+    cout << endl;
+
+    cout << "test move ctor:" << endl << endl;
+
+    SSArray<int> foo(4);
+    SSArray<int> bar;
+    bar = move(foo);
+    for(auto x : foo)
+	cout << x << endl;
+    cout << endl;
+    for(auto x : bar)
+	cout << x << endl;
 
     return 0;
 }
