@@ -18,10 +18,11 @@ using std::swap;
 using std::size_t;
 
 // TODO:
-// - read through main list of requirements for preconditions (& other stuff)
-// - read coding standards
+// - how to follow coding standard 3A?
+// - document noexcept?
 // - search for TODO in this file
 // - wait until project 1 is graded, apply feedback to project 2
+// - read through the code one more time before submitting
 // - test the final version before submitting
 
 // class template SSArray
@@ -30,8 +31,8 @@ using std::size_t;
 //     - _size >= 0
 //     - _pointer points to dynamically allocated memory that is owned by *this
 //       and holds _size items of type value_type.
-//     - size_type is std::size_t from <cstddef>.
-//     - value_type is the specified template parameter.
+//     - size_type is std::size_t from <cstddef>.  TODO: only necessary if this can change? (or is non-obvious?)
+//     - value_type is the specified template parameter.  TODO: only necessary if this can change? (or is non-obvious?)
 template <typename T>
 class SSArray {
 
@@ -53,15 +54,15 @@ public:
     // Cannot serve as an implicit type conversion.
     // Pre:
     //     size >= 0
-    explicit SSArray(int size)
+    explicit SSArray(size_type size)
 	:_size(size), _pointer(new value_type[_size])
     {}
 
     // Ctor from size and initial value.
-    // Initialize the array with size items, each equal to value.
+    // Initialize the array with size items, each set to value.
     // Pre:
     //     size >= 0
-    SSArray(int size, value_type value)
+    SSArray(size_type size, value_type value)
 	:_size(size), _pointer(new value_type[_size])
     {
 	fill(begin(), end(), value);
