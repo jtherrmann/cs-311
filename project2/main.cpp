@@ -119,7 +119,7 @@ int main() {
 
     cout << endl;
 
-    cout << "test copy ctor:" << endl << endl;
+    cout << "test copy assign:" << endl << endl;
 
     SSArray<int> first(4);
     first[0] = 2;
@@ -135,7 +135,7 @@ int main() {
 
     cout << endl;
 
-    cout << "test move ctor:" << endl << endl;
+    cout << "test move assign:" << endl << endl;
 
     SSArray<int> foo(4);
     SSArray<int> bar;

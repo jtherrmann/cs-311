@@ -1,17 +1,12 @@
 // ssarray.h
 // Jake Herrmann
-// 18 Sep 2018
+// 20 Sep 2018
 //
 // CS 311 Fall 2018
 // Header for class template SSArray
 
 #ifndef FILE_SSARRAY_H_INCLUDED
 #define FILE_SSARRAY_H_INCLUDED
-
-// TODO: remove
-#include <iostream>
-using std::cout;
-using std::endl;
 
 #include <algorithm>
 using std::copy;
@@ -22,94 +17,118 @@ using std::swap;
 #include <cstddef>
 using std::size_t;
 
+// TODO:
+// - read through main list of requirements for preconditions (& other stuff)
+// - read coding standards
+// - search for TODO in this file
+// - wait until project 1 is graded, apply feedback to project 2
+// - test the final version before submitting
+
+// class template SSArray
+// A somewhat smart array.
+// Invariants:
+//     - _size >= 0
+//     - _pointer points to dynamically allocated memory that is owned by *this
+//       and holds _size items of type value_type.
+//     - size_type is std::size_t from <cstddef>.
+//     - value_type is the specified template parameter.
 template <typename T>
 class SSArray {
 
+// SSArray: Public member types.
 public:
 
     using size_type = size_t;
-    using value_type = T;  // TODO: is this correct?
+    using value_type = T;
 
+// SSArray: Ctors and the Big Five.
 public:
 
+    // Default ctor.
+    // Initialize the array with 8 items.
     SSArray(): _size(8), _pointer(new value_type[_size]) {}
 
+    // Ctor from size.
+    // Initialize the array with size items.
+    // Cannot serve as an implicit type conversion.
+    // Pre:
+    //     size >= 0
     explicit SSArray(int size)
 	:_size(size), _pointer(new value_type[_size])
     {}
 
+    // Ctor from size and initial value.
+    // Initialize the array with size items, each equal to value.
+    // Pre:
+    //     size >= 0
     SSArray(int size, value_type value)
 	:_size(size), _pointer(new value_type[_size])
     {
 	fill(begin(), end(), value);
     }
 
-    // dctor
+    // Dctor
+    // Release dynamically allocated memory.
     ~SSArray() {
 	delete [] _pointer;
     }
 
-    // copy ctor
+    // Copy ctor
     SSArray(const SSArray & other)
 	:_size(other._size), _pointer(new value_type[_size])
     {
-	// TODO: remove
-	cout << "COPY" << endl;
-	
 	copy(other.begin(), other.end(), begin());
     }
 
-    // move ctor
+    // Move ctor
     SSArray(SSArray && other) noexcept
     	:_size(other._size), _pointer(other._pointer)
     {
-    	// TODO: remove
-    	cout << "MOVE" << endl;
-
 	other._pointer = nullptr;
     }
 
-    // copy assign
+    // op= (copy)
     SSArray & operator=(const SSArray & other) {
-	// TODO: remove
-	cout << "COPY ASSIGN" << endl;
-	
 	SSArray copy(other);
 	mswap(copy);
 	return *this;
     }
 
-    // move assign
-    // TODO: test more
+    // op= (move)
     SSArray & operator=(SSArray && other) noexcept {
-	// TODO: remove
-	cout << "MOVE ASSIGN" << endl;
-	
 	mswap(other);
 	return * this;
     }
 	
 
+// SSArray: General public operators.
 public:
 
-    // TODO: see intarray.h for help on const bracket operator
+    // op[] (non-const and const)
+    // Pre:
+    //     0 <= index < _size
     value_type & operator[](size_type index) {
 	return _pointer[index];
     }
-
     const value_type & operator[](size_type index) const {
 	return _pointer[index];
     }
 
+    // op==
+    // Compare the two arrays' sizes and items. Return true if equal and false
+    // otherwise.
     bool operator==(const SSArray & other) const {
 	return size() == other.size() && equal(begin(), end(), other.begin());
     }
 
+    // op!=
     bool operator!=(const SSArray & other) const {
 	return !(*this == other);
     }
 
-    // TODO: test
+    // op<
+    // Compare the two arrays' items in lexicographic order. Return true if
+    // *this < other and false otherwise.
     bool operator<(const SSArray & other) const {
 	auto it1 = begin();
 	auto it2 = other.begin();
@@ -122,47 +141,60 @@ public:
 	return size() < other.size();
     }
 
+    // op<=
     bool operator<=(const SSArray & other) const {
 	return *this < other || *this == other;
     }
 
+    // op>
     bool operator>(const SSArray & other) const {
 	return !(*this <= other);
     }
 
+    // op>=
     bool operator>=(const SSArray & other) const {
 	return !(*this < other);
     }
 
+// SSArray: Public member functions.
 public:
 
+    // size
+    // Return the array's size.
     size_type size() const {
 	return _size;
     }
     
+    // begin (non-const and const)
+    // Return a pointer to the first item in the array.
     value_type * begin() {
 	return _pointer;
     }
-
     const value_type * begin() const {
 	return _pointer;
     }
 
+    // end (non-const and const)
+    // Return a pointer to one position past the last item in the array.
     value_type * end() {
 	return begin() + size();
     }
-
     const value_type * end() const {
 	return begin() + size();
     }
 
+// SSArray: Private data members.
 private:
 
     size_type _size;
     value_type * _pointer;
 
+// SSArray: Private member functions.
 private:
 
+    // mswap
+    // TODO
+    // TODO: both need to have the same size (in addition to value type)? if not, swap sizes...?
     void mswap(SSArray & other) noexcept {
 	swap(_size, other._size);
 	swap(_pointer, other._pointer);
