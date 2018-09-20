@@ -18,32 +18,30 @@ using std::swap;
 using std::size_t;
 
 // TODO:
-// - document noexcept?
-// - search for TODO in this file
-// - wait until project 1 is graded, apply feedback to project 2
 // - read through the code one more time before submitting
 // - test the final version before submitting
+
+// ============================================================================
+// class template Product: Class template definition
+// ============================================================================
 
 // class template SSArray
 // A somewhat smart array.
 //
-// Requirements on template parameter type:
-//     - T has a public operator!=, operator<, and dctor.
-//
-//     - T can serve as the data type for which memory is allocated with new[].
-//
-//     - T* must meet the requirements on iterators passed to std::copy,
-//       std::equal, and std::fill from <algorithm>. T must meet the
-//       requirements on the third parameter passed to std::fill.
-//
-//       For example, std::copy and std::fill likely require that T has a
-//       public copy ctor, while std::equal likely requires that T has a public
-//       operator==. Also see: http://www.cplusplus.com/reference/algorithm/
+// Requirements on Types:
+//     - T is a data type for which new[] can allocate memory.
+//     - T has a public dctor.
+//     - T* meets the requirements on iterators passed to std::copy and
+//       std::fill from <algorithm> (and T meets the requirements on the third
+//       parameter passed to std::fill). In particular, T has a public copy
+//       ctor. Also see: http://www.cplusplus.com/reference/algorithm/copy/ and
+//       http://www.cplusplus.com/reference/algorithm/fill/
 //
 // Invariants:
 //     - _size >= 0
 //     - _pointer points to memory allocated with new[]; the memory is owned by
 //       *this and holds _size items of type value_type.
+//
 template <typename T>
 class SSArray {
 
@@ -93,6 +91,7 @@ public:
     }
 
     // Move ctor
+    // Promises to throw no exceptions.
     SSArray(SSArray && other) noexcept
     	:_size(other._size), _pointer(other._pointer)
     {
@@ -107,12 +106,12 @@ public:
     }
 
     // op= (move)
+    // Promises to throw no exceptions.
     SSArray & operator=(SSArray && other) noexcept {
 	mswap(other);
 	return * this;
     }
 	
-
 // SSArray: General public operators.
 public:
 
@@ -124,48 +123,6 @@ public:
     }
     const value_type & operator[](size_type index) const {
 	return _pointer[index];
-    }
-
-    // op==
-    // Compare the two arrays' sizes and items. Return true if equal and false
-    // otherwise.
-    bool operator==(const SSArray & other) const {
-	return size() == other.size() && equal(begin(), end(), other.begin());
-    }
-
-    // op!=
-    bool operator!=(const SSArray & other) const {
-	return !(*this == other);
-    }
-
-    // op<
-    // Compare the two arrays' items in lexicographic order. Return true if
-    // *this < other and false otherwise.
-    bool operator<(const SSArray & other) const {
-	auto it1 = begin();
-	auto it2 = other.begin();
-	while(it1 != end() && it2 != other.end()) {
-	    if(*it1 != *it2)
-		return *it1 < *it2;
-	    ++it1;
-	    ++it2;
-	}
-	return size() < other.size();
-    }
-
-    // op<=
-    bool operator<=(const SSArray & other) const {
-	return *this < other || *this == other;
-    }
-
-    // op>
-    bool operator>(const SSArray & other) const {
-	return !(*this <= other);
-    }
-
-    // op>=
-    bool operator>=(const SSArray & other) const {
-	return !(*this < other);
     }
 
 // SSArray: Public member functions.
@@ -205,13 +162,82 @@ private:
 private:
 
     // mswap
-    // TODO
-    // TODO: both need to have the same size (in addition to value type)? if not, swap sizes...?
+    // Swap the _size and _pointer data members of the two arrays.
+    // Promises to throw no exceptions.
     void mswap(SSArray & other) noexcept {
 	swap(_size, other._size);
 	swap(_pointer, other._pointer);
     }
 
-};
+};  // End class template SSArray
+
+
+// ============================================================================
+// class template Product: Associated global operators
+// ============================================================================
+
+// op==
+// Compare the two arrays' sizes and items. Return true if equal and false
+// otherwise.
+// Requirements on Types:
+//     T* meets the requirements on iterators passed to std::equal from
+//     <algorithm>. In particular, T has a public operator==. Also see:
+//     http://www.cplusplus.com/reference/algorithm/equal/
+template <typename T>
+bool operator==(const SSArray<T> & first, const SSArray<T> & second) {
+    return (first.size() == second.size()
+	    && equal(first.begin(), first.end(), second.begin()));
+}
+
+// op!=
+// Requirements on Types:
+//     See documentation for global operator== (above).
+template <typename T>
+bool operator!=(const SSArray<T> & first, const SSArray<T> & second) {
+    return !(first == second);
+}
+
+// op<
+// Compare the two arrays' items in lexicographic order. Return true if first <
+// second and false otherwise.
+// Requirements on Types:
+//     T has a public operator!= and a public operator<.
+template <typename T>
+bool operator<(const SSArray<T> & first, const SSArray<T> & second) {
+    auto it1 = first.begin();
+    auto it2 = second.begin();
+    while(it1 != first.end() && it2 != second.end()) {
+	if(*it1 != *it2)
+	    return *it1 < *it2;
+	++it1;
+	++it2;
+    }
+    return first.size() < second.size();
+}
+
+// op<=
+// Requirements on Types:
+//     See documentation for global operator< and global operator== (above).
+template <typename T>
+bool operator<=(const SSArray<T> & first, const SSArray<T> & second) {
+    return first < second || first == second;
+}
+
+// op>
+// Requirements on Types:
+//     See documentation for global operator<= (above).
+template <typename T>
+bool operator>(const SSArray<T> & first, const SSArray<T> & second) {
+    return !(first <= second);
+}
+
+// op>=
+// Requirements on Types:
+//     See documentation for global operator< (above).
+template <typename T>
+bool operator>=(const SSArray<T> & first, const SSArray<T> & second) {
+    return !(first < second);
+}
+
 
 #endif  //#ifndef FILE_SSARRAY_H_INCLUDED
