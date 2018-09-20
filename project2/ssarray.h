@@ -17,12 +17,9 @@ using std::swap;
 #include <cstddef>
 using std::size_t;
 
-// TODO:
-// - read through the code one more time before submitting
-// - test the final version before submitting
 
 // ============================================================================
-// class template Product: Class template definition
+// class template SSArray: Class template definition
 // ============================================================================
 
 // class template SSArray
@@ -56,7 +53,9 @@ public:
 
     // Default ctor.
     // Initialize the array with 8 items.
-    SSArray(): _size(8), _pointer(new value_type[_size]) {}
+    SSArray()
+	:_size(8), _pointer(new value_type[_size])
+    {}
 
     // Ctor from size.
     // Initialize the array with size items.
@@ -109,7 +108,7 @@ public:
     // Promises to throw no exceptions.
     SSArray & operator=(SSArray && other) noexcept {
 	mswap(other);
-	return * this;
+	return *this;
     }
 	
 // SSArray: General public operators.
@@ -173,7 +172,7 @@ private:
 
 
 // ============================================================================
-// class template Product: Associated global operators
+// class template SSArray: Associated global operators
 // ============================================================================
 
 // op==
