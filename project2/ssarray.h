@@ -18,7 +18,6 @@ using std::swap;
 using std::size_t;
 
 // TODO:
-// - how to follow coding standard 3A?
 // - document noexcept?
 // - search for TODO in this file
 // - wait until project 1 is graded, apply feedback to project 2
@@ -27,12 +26,24 @@ using std::size_t;
 
 // class template SSArray
 // A somewhat smart array.
+//
+// Requirements on template parameter type:
+//     - T has a public operator!=, operator<, and dctor.
+//
+//     - T can serve as the data type for which memory is allocated with new[].
+//
+//     - T* must meet the requirements on iterators passed to std::copy,
+//       std::equal, and std::fill from <algorithm>. T must meet the
+//       requirements on the third parameter passed to std::fill.
+//
+//       For example, std::copy and std::fill likely require that T has a
+//       public copy ctor, while std::equal likely requires that T has a public
+//       operator==. Also see: http://www.cplusplus.com/reference/algorithm/
+//
 // Invariants:
 //     - _size >= 0
-//     - _pointer points to dynamically allocated memory that is owned by *this
-//       and holds _size items of type value_type.
-//     - size_type is std::size_t from <cstddef>.  TODO: only necessary if this can change? (or is non-obvious?)
-//     - value_type is the specified template parameter.  TODO: only necessary if this can change? (or is non-obvious?)
+//     - _pointer points to memory allocated with new[]; the memory is owned by
+//       *this and holds _size items of type value_type.
 template <typename T>
 class SSArray {
 
