@@ -8,8 +8,16 @@
 #ifndef FILE_DA3_H_INCLUDED
 #define FILE_DA3_H_INCLUDED
 
+// TODO: remove
+#include <iostream>
+using std::cout;
+using std::endl;
+
 #include <cstddef>
 using std::size_t;
+
+#include <stdexcept>
+using std::out_of_range;
 
 
 // **************************************************************** // *
@@ -66,12 +74,22 @@ struct LLNode {                                                     // *
 // **************************************************************** // *
 
 
+// TODO: document
 template <typename ValueType>
 ValueType lookup(const LLNode<ValueType> * head,
                  size_t index)
 {
-    return ValueType();  // Dummy return
-    // TODO: Write this!!!
+    if (index < 0)
+	throw out_of_range("TODO"); // TODO: string
+    auto node = head;
+    size_t count = 0;
+    while (node != nullptr) {
+	if (count == index)
+	    return node->_data;
+	node = node->_next;
+	++count;
+    }
+    throw out_of_range("TODO"); // TODO: string
 }
 
 
