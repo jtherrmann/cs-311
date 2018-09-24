@@ -109,12 +109,31 @@ void didItThrow(Func f,
 }
 
 
+// TODO: document; can/should be in da3.cpp?
+template <typename RAIter>
+bool inRange(RAIter first, RAIter current) {
+    while (first != current) {
+	if (*first == *current)
+	    return true;
+	++first;
+    }
+    return false;
+}
+
+
+// TODO: document
 template <typename RAIter>
 size_t uniqueCount(RAIter first,
                    RAIter last)
 {
-    return size_t(42);  // Dummy return
-    // TODO: Write this!!!
+    size_t count = 0;
+    RAIter current = first;
+    while (current != last) {
+	if (!inRange(first, current))
+	    ++count;
+	++current;
+    }
+    return count;
 }
 
 
