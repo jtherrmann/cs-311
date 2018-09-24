@@ -93,11 +93,19 @@ ValueType lookup(const LLNode<ValueType> * head,
 }
 
 
+// TODO: document
 template <typename Func>
 void didItThrow(Func f,
                 bool & threw)
 {
-    // TODO: Write this!!!
+    try {
+	f();
+    }
+    catch (...) {
+	threw = true;
+	throw;
+    }
+    threw = false;
 }
 
 
