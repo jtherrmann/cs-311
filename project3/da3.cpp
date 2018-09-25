@@ -7,12 +7,25 @@
 
 #include "da3.h"       // For Project 3 prototypes & templates
 
+#include <cmath>
+using std::pow;
 
+
+// TODO: document (in header; esp. precond.)
 int modExp(int a,
            int b,
            int n)
 {
-    return 42;  // Dummy return
-    // TODO: Write this!!!
+    if (n == 1)
+	return 0;
+    if (b == 0)
+	return 1;
+
+    int q = modExp(a, b/2, n);
+
+    if (b % 2 == 0)
+	return (int)pow(q, 2) % n;
+
+    return ((a % n) * ((int)pow(q, 2) % n)) % n;
 }
 
