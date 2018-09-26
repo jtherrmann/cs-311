@@ -7,9 +7,6 @@
 
 #include "da3.h"       // For Project 3 prototypes & templates
 
-#include <cmath>
-using std::pow;
-
 
 // TODO: document (in header; esp. precond.)
 int modExp(int a,
@@ -24,8 +21,8 @@ int modExp(int a,
     int q = modExp(a, b/2, n);
 
     if (b % 2 == 0)
-	return (int)pow(q, 2) % n;
+	return (q * q) % n;
 
-    return ((a % n) * ((int)pow(q, 2) % n)) % n;
+    return ((a % n) * ((q * q) % n)) % n;
 }
 
