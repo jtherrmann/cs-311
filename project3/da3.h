@@ -1,17 +1,18 @@
-// da3.h  SKELETON
-// Glenn G. Chappell
-// 21 Sep 2018
+// da3.h
+// Jake Herrmann
+// 27 Sep 2018
 //
-// For CS 311 Fall 2018
-// Header for Project 3 Functions
+// CS 311 Fall 2018
+// Header for Project 3 functions
+//
+// Original skeleton functions and struct LLNode provided by Glenn G. Chappell.
 
 #ifndef FILE_DA3_H_INCLUDED
 #define FILE_DA3_H_INCLUDED
 
-// TODO: remove
-#include <iostream>
-using std::cout;
-using std::endl;
+#include <algorithm>
+using std::sort;
+using std::unique;
 
 #include <cstddef>
 using std::size_t;
@@ -74,13 +75,18 @@ struct LLNode {                                                     // *
 // **************************************************************** // *
 
 
-// TODO: document
+// function template lookup
+//
+// For 0 <= index < size, where size is the length of the list starting with
+// head, return the value of the _data member of the node corresponding to
+// index. For other values of index, throw an std::out_of_range exception.
+//
+// Requirements on Types: see the documentation for struct LLNode.
 template <typename ValueType>
-ValueType lookup(const LLNode<ValueType> * head,
-                 size_t index)
+ValueType lookup(const LLNode<ValueType> * head, size_t index)
 {
     if (index < 0)
-	throw out_of_range("TODO"); // TODO: string
+	throw out_of_range("index out of bounds: index < 0");
     auto node = head;
     size_t count = 0;
     while (node != nullptr) {
@@ -89,14 +95,20 @@ ValueType lookup(const LLNode<ValueType> * head,
 	node = node->_next;
 	++count;
     }
-    throw out_of_range("TODO"); // TODO: string
+    throw out_of_range("index out of bounds: index >= size of the list");
 }
 
 
-// TODO: document
+// function template didItThrow
+//
+// Call Func with no parameters. If the call throws an exception, set threw to
+// true and re-throw the exception; otherwise set threw to false and return.
+//
+// Requirements on Types:
+// - Func is either a function pointer or an object for which operator() is
+//   defined. Func can be called with no parameters.
 template <typename Func>
-void didItThrow(Func f,
-                bool & threw)
+void didItThrow(Func f, bool & threw)
 {
     try {
 	f();
@@ -109,38 +121,40 @@ void didItThrow(Func f,
 }
 
 
-// TODO: document; can/should be in da3.cpp?
+// function template uniqueCount
+//
+// Return the number of unique values in the given range.
+//
+// Pre:
+// - operator< and operator== are defined for the type of the values in the
+//   range. operator== is an equivalence relation.
+// - The range is mutable.
+//
+// Requirements on Types:
+// - RAIter meets the type requirements of std::sort and std::unique from
+//   <algorithm>. See:
+//   - https://en.cppreference.com/w/cpp/algorithm/sort
+//   - https://en.cppreference.com/w/cpp/algorithm/unique
 template <typename RAIter>
-bool inRange(RAIter first, RAIter current) {
-    while (first != current) {
-	if (*first == *current)
-	    return true;
-	++first;
-    }
-    return false;
-}
-
-
-// TODO: document
-template <typename RAIter>
-size_t uniqueCount(RAIter first,
-                   RAIter last)
+size_t uniqueCount(RAIter first, RAIter last)
 {
-    size_t count = 0;
-    RAIter current = first;
-    while (current != last) {
-	if (!inRange(first, current))
-	    ++count;
-	++current;
-    }
-    return count;
+    // std::unique removes duplicate consecutive elements and returns the
+    // resulting range's upper bound iterator.
+    // Adapted from: https://stackoverflow.com/a/28100858/10402025
+    sort(first, last);
+    return unique(first, last) - first;
 }
 
 
-// Implementation in source file
-int modExp(int a,
-           int b,
-           int n);
+// modExp
+//
+// Return (a raised to the power of b) mod n.
+//
+// Pre:
+// - a >= 1
+// - b >= 0
+// - n >= 1
+int modExp(int a, int b, int n);
 
 
 #endif  //#ifndef FILE_DA3_H_INCLUDED
