@@ -150,6 +150,8 @@ size_t uniqueCount(RAIter first, RAIter last)
 //
 // Return (a raised to the power of b) mod n.
 //
+// Does not throw.
+//
 // Pre:
 // - a >= 1
 // - b >= 0
