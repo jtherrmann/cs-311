@@ -16,8 +16,8 @@ using std::vector;
 #include <cassert>
 
 
-int countHDT_recurse(vector<vector<int>> board, int dim_x, int dim_y, int empty_squares);
-pair<int, int> first_empty(vector<vector<int>> board, int dim_x, int dim_y);
+int countHDT_recurse(vector<vector<int>> & board, int dim_x, int dim_y, int empty_squares);
+pair<int, int> first_empty(vector<vector<int>> & board, int dim_x, int dim_y);
 
 
 int countHDT(int dim_x, int dim_y,
@@ -31,7 +31,7 @@ int countHDT(int dim_x, int dim_y,
 }
 
 
-int countHDT_recurse(vector<vector<int>> board, int dim_x, int dim_y, int empty_squares) {
+int countHDT_recurse(vector<vector<int>> & board, int dim_x, int dim_y, int empty_squares) {
     if (empty_squares == 0)
 	return 1;
 
@@ -61,7 +61,7 @@ int countHDT_recurse(vector<vector<int>> board, int dim_x, int dim_y, int empty_
 }
 
 // TODO: pre: contains at least one empty?
-pair<int, int> first_empty(vector<vector<int>> board, int dim_x, int dim_y) {
+pair<int, int> first_empty(vector<vector<int>> & board, int dim_x, int dim_y) {
     for (int y = 0; y < dim_y; ++y) {
 	for (int x = 0; x < dim_x; ++x) {
 	    if (board[x][y] != 1)
