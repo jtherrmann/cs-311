@@ -20,12 +20,12 @@ using std::vector;
 // ============================================================================
 
 // countHDT_recurse
-// See definition for documentation.
+// See definition for documentation (below).
 int countHDT_recurse(vector<vector<int>> & board,
 		     int dim_x, int dim_y, int empty_squares);
 
 // first_empty
-// See definition for documentation.
+// See definition for documentation (below).
 pair<int, int> first_empty(vector<vector<int>> & board, int dim_x, int dim_y);
 
 
@@ -53,7 +53,7 @@ int countHDT(int dim_x, int dim_y,
 // countHDT_recurse
 //
 // Return 1 if the given board represents a full solution, otherwise return the
-// number of full solutions that can be formed from the given partial solution.
+// number of full solutions that can be formed from the partial solution.
 //
 // Pre:
 // - dim_x > 0
@@ -106,7 +106,7 @@ int countHDT_recurse(vector<vector<int>> & board,
 
 // first_empty
 //
-// Return the coordinates of the first non-empty square on the board.
+// Return the coordinates of the first empty square on the board.
 //
 // Pre:
 // - dim_x > 0
