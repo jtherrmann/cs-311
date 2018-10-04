@@ -8,13 +8,21 @@
 #ifndef FILE_COUNTHDT_H_INCLUDED
 #define FILE_COUNTHDT_H_INCLUDED
 
+
+// countHDT
+//
+// Return the number of holey domino tilings on a given board.
+//
 // Pre:
 // - 0 <= forbid1_x < dim_x
 // - 0 <= forbid1_y < dim_y
 // - 0 <= forbid2_x < dim_x
 // - 0 <= forbid2_y < dim_y
+//
+// Does not throw.
 int countHDT(int dim_x, int dim_y,
 	     int forbid1_x, int forbid1_y,
 	     int forbid2_x, int forbid2_y);
+
 
 #endif  //#ifndef FILE_COUNTHDT_H_INCLUDED
