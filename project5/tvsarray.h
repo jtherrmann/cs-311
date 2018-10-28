@@ -10,6 +10,8 @@
 
 // TODO: address TODO/FIXME in file
 // TODO: all must be exception neutral? and marked as such?
+// TODO: read through project description, coding standards, & relevant lecture
+// slides
 
 
 #ifndef FILE_TVSARRAY_H_INCLUDED
@@ -19,7 +21,7 @@
 // For std::size_t
 
 #include <algorithm>
-// For std::copy, std::max
+// For std::copy, std::max, std::swap
 
 
 // ============================================================================
@@ -81,16 +83,28 @@ public:
 
     // Copy ctor
     // Strong Guarantee
+    // Exception neutral.
     //
     // TODO ROT:
     // - VT default ctor strong guarantee; for _data(new...)
-    // - what VT methods called by begin, end, std::copy?
     TVSArray(const TVSArray & other)
 	:_capacity(other._capacity),
 	 _size(other._size),
 	 _data(new value_type[other._capacity])
     {
-	std::copy(other.begin(), other.end(), begin());
+	value_type * newdata = new value_type[_capacity];
+
+	try {
+	    std::copy(other.begin(), other.end(), newdata);
+	}
+	catch (...) {
+	    delete [] _data;
+	    delete [] newdata;
+	    throw;
+	}
+
+	std::swap(_data, newdata);
+	delete [] newdata;
     }
 
     // Move ctor
@@ -110,23 +124,22 @@ public:
     }
 
     // Copy assignment operator
-    // ??? Guarantee (TODO)
-    //
-    // TODO ROT
+    // Strong Guarantee
+    // Exception neutral.
     TVSArray & operator=(const TVSArray & other)
     {
-	return *this;  // Dummy return
-	// TODO: Write this!!!
+	TVSArray copy(other);
+	swap(copy);
+	return *this;
     }
 
     // Move assignment operator
     // No-Throw Guarantee
-    //
-    // TODO ROT
+    // Exception neutral.
     TVSArray & operator=(TVSArray && other) noexcept
     {
-	return *this;  // Dummy return
-	// TODO: Write this!!!
+	swap(other);
+	return *this;
     }
 
     // Dctor
@@ -197,10 +210,39 @@ public:
     }
 
     // resize
-    // ??? Guarantee (TODO)
+    //
+    // Pre:
+    // - newsize >= 0
+    //
+    // Strong Guarantee
+    // Exception neutral.
     void resize(size_type newsize)
     {
-	// TODO: Write this!!!
+	if (newsize <= _capacity)
+	    _size = newsize;
+	else {
+	    size_type newcap = _capacity * 2;
+	    if (newcap < newsize)
+		newcap = newsize;
+
+	    value_type * newdata = new value_type[newcap];
+
+	    try {
+	    	std::copy(begin(), end(), newdata);
+	    }
+	    catch (...) {
+	    	delete [] newdata;
+	    	throw;
+	    }
+
+	    // TODO:
+	    // - https://www.cs.uaf.edu/~chappell/class/2018_fall/cs311/lect/cs311-20181024-generic.pdf
+	    //   - slide 24: use std::swap on ALL data members?
+	    _size = newsize;
+	    _capacity = newcap;
+	    std::swap(_data, newdata);
+	    delete [] newdata;
+	}
     }
 
     // insert
@@ -237,9 +279,12 @@ public:
 
     // swap
     // No-Throw Guarantee
+    // Exception neutral.
     void swap(TVSArray & other) noexcept
     {
-	// TODO: Write this!!!
+	std::swap(_capacity, other._capacity);
+	std::swap(_size, other._size);
+	std::swap(_data, other._data);
     }
 
 // TVSArray: Private data members
