@@ -29,8 +29,6 @@
 
 // TODO: requirements on types, invariants; others?
 // - do we actually need to forbid types that throw for move ops?
-// - also see project 2 ssarray.h req. on types, skim rest of code too
-//   - and whatever chappell example (intarray.h?) those type req.s came from
 
 // TODO: mark all no-throw methods noexcept?
 
@@ -41,8 +39,13 @@
 // Resizable, copyable/movable, exception-safe.
 
 // Requirements on Types:
-// - T has a public dctor that offers the No-Throw Guarantee.
+// - T is a data type for which new[] can allocate memory.
 // - T has a default ctor that offers the Strong Guarantee.
+// - T has a dctor that offers the No-Throw Guarantee.
+// - T* meets the requirements on iterators passed to std::copy and std::rotate
+//   from <algorithm>.
+//   - https://en.cppreference.com/w/cpp/algorithm/copy
+//   - https://en.cppreference.com/w/cpp/algorithm/rotate
 //
 // Invariants:
 // - 0 <= _size <= _capacity.
@@ -75,6 +78,7 @@ private:
 public:
 
     // Default ctor & ctor from size
+    // Cannot serve as an implicit type conversion.
     // Strong Guarantee
     // Exception Neutral
     explicit TVSArray(size_type size=0)
