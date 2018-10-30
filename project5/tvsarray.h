@@ -9,7 +9,6 @@
 
 
 // TODO: address TODO/FIXME in file
-// TODO: all must be exception neutral? and marked as such?
 // TODO: read through project description, coding standards, & relevant lecture
 // slides
 
@@ -29,6 +28,11 @@
 // ============================================================================
 
 // TODO: requirements on types, invariants; others?
+// - do we actually need to forbid types that throw for move ops?
+// - also see project 2 ssarray.h req. on types, skim rest of code too
+//   - and whatever chappell example (intarray.h?) those type req.s came from
+
+// TODO: mark all no-throw methods noexcept?
 
 
 // class template TVSArray
@@ -36,7 +40,9 @@
 //
 // Resizable, copyable/movable, exception-safe.
 
-// Requirements on Types: TODO
+// Requirements on Types:
+// - T has a public dctor that offers the No-Throw Guarantee.
+// - T has a default ctor that offers the Strong Guarantee.
 //
 // Invariants:
 // - 0 <= _size <= _capacity.
@@ -70,10 +76,7 @@ public:
 
     // Default ctor & ctor from size
     // Strong Guarantee
-    //
-    // TODO ROT (requirements on types):
-    // - VT (value_type) default ctor must offer strong guarantee; for
-    //   _data(new...)
+    // Exception Neutral
     explicit TVSArray(size_type size=0)
         :_capacity(std::max(size, size_type(DEFAULT_CAP))),
             // _capacity must be declared before _data
@@ -83,10 +86,7 @@ public:
 
     // Copy ctor
     // Strong Guarantee
-    // Exception neutral.
-    //
-    // TODO ROT:
-    // - VT default ctor strong guarantee; for _data(new...)
+    // Exception Neutral
     TVSArray(const TVSArray & other)
 	:_capacity(other._capacity),
 	 _size(other._size),
@@ -109,10 +109,7 @@ public:
 
     // Move ctor
     // No-Throw Guarantee
-    //
-    // TODO ROT:
-    // - VT no-throw for move ctor? does _data(other._data) invoke VT's move
-    //   ctor?
+    // Exception Neutral
     TVSArray(TVSArray && other) noexcept
 	:_capacity(other._capacity),
 	 _size(other._size),
@@ -125,7 +122,7 @@ public:
 
     // Copy assignment operator
     // Strong Guarantee
-    // Exception neutral.
+    // Exception Neutral
     TVSArray & operator=(const TVSArray & other)
     {
 	TVSArray copy(other);
@@ -135,7 +132,7 @@ public:
 
     // Move assignment operator
     // No-Throw Guarantee
-    // Exception neutral.
+    // Exception Neutral
     TVSArray & operator=(TVSArray && other) noexcept
     {
 	swap(other);
@@ -144,9 +141,7 @@ public:
 
     // Dctor
     // No-Throw Guarantee
-    //
-    // TODO ROT:
-    // - VT no-throw dctor
+    // Exception Neutral
     ~TVSArray()
     {
         delete [] _data;
@@ -155,10 +150,13 @@ public:
 // TVSArray: General public operators
 public:
 
-    // TODO ROT
-
     // operator[] - non-const & const
+    //
+    // Pre:
+    // - 0 <= index < size()
+    //
     // No-Throw Guarantee
+    // Exception Neutral
     value_type & operator[](size_type index)
     {
         return _data[index];
@@ -171,10 +169,9 @@ public:
 // TVSArray: General public member functions
 public:
 
-    // TODO ROT
-
     // size
     // No-Throw Guarantee
+    // Exception Neutral
     size_type size() const
     {
         return _size;
@@ -182,6 +179,7 @@ public:
 
     // empty
     // No-Throw Guarantee
+    // Exception Neutral
     bool empty() const
     {
         return size() == 0;
@@ -189,6 +187,7 @@ public:
 
     // begin - non-const & const
     // No-Throw Guarantee
+    // Exception Neutral
     iterator begin()
     {
         return _data;
@@ -200,6 +199,7 @@ public:
 
     // end - non-const & const
     // No-Throw Guarantee
+    // Exception Neutral
     iterator end()
     {
         return begin() + size();
@@ -220,7 +220,7 @@ public:
     // - newsize >= 0
     //
     // Strong Guarantee
-    // Exception neutral.
+    // Exception Neutral
     void resize(size_type newsize)
     {
 	if (newsize <= _capacity)
@@ -255,7 +255,8 @@ public:
     // Pre:
     // - begin() <= pos <= end()
     //
-    // ??? Guarantee (TODO)
+    // Basic Guarantee
+    // Exception Neutral
     iterator insert(iterator pos, const value_type & item)
     {
 	size_type index = pos - begin();
@@ -266,7 +267,6 @@ public:
 	*last = item;
 
 	std::rotate(newpos, last, end());
-
 	return newpos;
     }
 
@@ -275,7 +275,8 @@ public:
     // Pre:
     // - begin() <= pos < end()
     //
-    // ??? Guarantee (TODO)
+    // Basic Guarantee
+    // Exception Neutral
     iterator erase(iterator pos)
     {
 	std::rotate(pos, pos + 1, end());
@@ -285,7 +286,9 @@ public:
 
     // push_back
     // InsertEnd operation.
-    // ??? Guarantee (TODO)
+    //
+    // Basic Guarantee
+    // Exception Neutral
     void push_back(const value_type & item)
     {
         insert(end(), item);
@@ -293,15 +296,17 @@ public:
 
     // pop_back
     // RemoveEnd operation.
-    // ??? Guarantee (TODO)
+    //
+    // Basic Guarantee
+    // Exception Neutral
     void pop_back()
     {
-        erase(end()-1);
+        erase(end() - 1);
     }
 
     // swap
     // No-Throw Guarantee
-    // Exception neutral.
+    // Exception Neutral
     void swap(TVSArray & other) noexcept
     {
 	std::swap(_capacity, other._capacity);
