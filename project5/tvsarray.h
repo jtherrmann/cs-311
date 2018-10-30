@@ -21,7 +21,7 @@
 // For std::size_t
 
 #include <algorithm>
-// For std::copy, std::max, std::swap
+// For std::copy, std::max, std::rotate, std::swap
 
 
 // ============================================================================
@@ -209,6 +209,11 @@ public:
         return begin() + size();
     }
 
+    // TODO: not strong guarantee / commit method?
+    // - https://www.cs.uaf.edu/~chappell/class/2018_fall/cs311/lect/cs311-20181024-generic.pdf
+    //   slide 28 (last slide)
+    // - but slide 24 says "use the commit-function idea" for resize
+    //
     // resize
     //
     // Pre:
@@ -246,19 +251,36 @@ public:
     }
 
     // insert
+    //
+    // Pre:
+    // - begin() <= pos <= end()
+    //
     // ??? Guarantee (TODO)
     iterator insert(iterator pos, const value_type & item)
     {
-	return pos;  // Dummy return
-	// TODO: Write this!!!
+	size_type index = pos - begin();
+	resize(size() + 1);
+	iterator newpos = begin() + index;
+
+	iterator last = end() - 1;
+	*last = item;
+
+	std::rotate(newpos, last, end());
+
+	return newpos;
     }
 
     // erase
+    //
+    // Pre:
+    // - begin() <= pos < end()
+    //
     // ??? Guarantee (TODO)
     iterator erase(iterator pos)
     {
-	return pos;  // Dummy return
-	// TODO: Write this!!!
+	std::rotate(pos, pos + 1, end());
+	resize(size() - 1);
+	return pos;
     }
 
     // push_back
