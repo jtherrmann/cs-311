@@ -9,8 +9,8 @@
 
 
 // TODO: address TODO/FIXME in file
-// TODO: read through project description, coding standards, & relevant lecture
-// slides
+// TODO: read through the coding standards & relevant lecture slides
+// TODO: scan all funcs for preconditions
 
 
 #ifndef FILE_TVSARRAY_H_INCLUDED
@@ -27,8 +27,10 @@
 // class template TVSArray: Class template definition
 // ============================================================================
 
-// TODO: requirements on types, invariants; others?
-// - do we actually need to forbid types that throw for move ops?
+// TODO:
+// - we can forbid only these val type methods from throwing:
+//   - destructor, move constructor, and move assignment
+// - do we actually need to forbid types that throw for move ctor/assign?
 
 // TODO: mark all no-throw methods noexcept?
 
@@ -300,6 +302,9 @@ public:
 
     // pop_back
     // RemoveEnd operation.
+    //
+    // Pre:
+    // - !empty()
     //
     // Basic Guarantee
     // Exception Neutral
