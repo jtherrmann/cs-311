@@ -1,6 +1,6 @@
 // tvsarray.h
 // Jake Herrmann
-// 1 Nov 2018
+// 31 Oct 2018
 //
 // CS 311 Fall 2018
 // Header for class template TVSArray
@@ -8,13 +8,9 @@
 // Based on class VSArray by Glenn G. Chappell.
 
 
-// TODO: address TODO/FIXME in file
-// TODO: read through the coding standards & relevant lecture slides
-// TODO: scan all funcs for preconditions
-
-
 #ifndef FILE_TVSARRAY_H_INCLUDED
 #define FILE_TVSARRAY_H_INCLUDED
+
 
 #include <cstddef>
 // For std::size_t
@@ -26,14 +22,6 @@
 // ============================================================================
 // class template TVSArray: Class template definition
 // ============================================================================
-
-// TODO:
-// - we can forbid only these val type methods from throwing:
-//   - destructor, move constructor, and move assignment
-// - do we actually need to forbid types that throw for move ctor/assign?
-
-// TODO: mark all no-throw methods noexcept?
-
 
 // class template TVSArray
 // Template for a Very Smart Array.
@@ -81,8 +69,12 @@ public:
 
     // Default ctor & ctor from size
     // Cannot serve as an implicit type conversion.
+    //
+    // Pre:
+    // - size >= 0
+    //
     // Strong Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     explicit TVSArray(size_type size=0)
         :_capacity(std::max(size, size_type(DEFAULT_CAP))),
             // _capacity must be declared before _data
@@ -92,7 +84,7 @@ public:
 
     // Copy ctor
     // Strong Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     TVSArray(const TVSArray & other)
 	:_capacity(other._capacity),
 	 _size(other._size),
@@ -115,7 +107,7 @@ public:
 
     // Move ctor
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     TVSArray(TVSArray && other) noexcept
 	:_capacity(other._capacity),
 	 _size(other._size),
@@ -128,7 +120,7 @@ public:
 
     // Copy assignment operator
     // Strong Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     TVSArray & operator=(const TVSArray & other)
     {
 	TVSArray copy(other);
@@ -138,7 +130,7 @@ public:
 
     // Move assignment operator
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     TVSArray & operator=(TVSArray && other) noexcept
     {
 	swap(other);
@@ -147,7 +139,7 @@ public:
 
     // Dctor
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     ~TVSArray()
     {
         delete [] _data;
@@ -162,7 +154,7 @@ public:
     // - 0 <= index < size()
     //
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     value_type & operator[](size_type index)
     {
         return _data[index];
@@ -177,7 +169,7 @@ public:
 
     // size
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     size_type size() const
     {
         return _size;
@@ -185,7 +177,7 @@ public:
 
     // empty
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     bool empty() const
     {
         return size() == 0;
@@ -193,7 +185,7 @@ public:
 
     // begin - non-const & const
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     iterator begin()
     {
         return _data;
@@ -205,7 +197,7 @@ public:
 
     // end - non-const & const
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     iterator end()
     {
         return begin() + size();
@@ -215,18 +207,13 @@ public:
         return begin() + size();
     }
 
-    // TODO: not strong guarantee / commit method?
-    // - https://www.cs.uaf.edu/~chappell/class/2018_fall/cs311/lect/cs311-20181024-generic.pdf
-    //   slide 28 (last slide)
-    // - but slide 24 says "use the commit-function idea" for resize
-    //
     // resize
     //
     // Pre:
     // - newsize >= 0
     //
     // Strong Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     void resize(size_type newsize)
     {
 	if (newsize <= _capacity)
@@ -246,11 +233,8 @@ public:
 	    	throw;
 	    }
 
-	    // TODO:
-	    // - https://www.cs.uaf.edu/~chappell/class/2018_fall/cs311/lect/cs311-20181024-generic.pdf
-	    //   - slide 24: use std::swap on ALL data members?
-	    _size = newsize;
-	    _capacity = newcap;
+	    std::swap(_capacity, newcap);
+	    std::swap(_size, newsize);
 	    std::swap(_data, newdata);
 	    delete [] newdata;
 	}
@@ -262,7 +246,7 @@ public:
     // - begin() <= pos <= end()
     //
     // Basic Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     iterator insert(iterator pos, const value_type & item)
     {
 	size_type index = pos - begin();
@@ -282,7 +266,7 @@ public:
     // - begin() <= pos < end()
     //
     // Basic Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     iterator erase(iterator pos)
     {
 	std::rotate(pos, pos + 1, end());
@@ -294,7 +278,7 @@ public:
     // InsertEnd operation.
     //
     // Basic Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     void push_back(const value_type & item)
     {
         insert(end(), item);
@@ -307,7 +291,7 @@ public:
     // - !empty()
     //
     // Basic Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     void pop_back()
     {
         erase(end() - 1);
@@ -315,7 +299,7 @@ public:
 
     // swap
     // No-Throw Guarantee
-    // Exception Neutral
+    // Exception neutral; does not throw additional exceptions.
     void swap(TVSArray & other) noexcept
     {
 	std::swap(_capacity, other._capacity);
