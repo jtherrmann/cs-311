@@ -16,8 +16,8 @@
 #include <memory>
 // For std::shared_ptr
 
-#include <tuple>
-// For std::tuple
+#include <utility>
+// For std::pair
 
 
 #include "llnode2.h"
@@ -41,7 +41,7 @@ public:
     using size_type = std::size_t;
 
     // TODO: acceptable solution for kv_type?
-    using kv_type = std::tuple<KType, VType>;
+    using kv_type = std::pair<KType, VType>;
 
 public:
 
