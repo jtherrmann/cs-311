@@ -26,7 +26,17 @@
 
 template<typename ValType>
 void reverseList(shared_ptr<LLNode2<ValType>> & head) {
-    // TODO: write this
+    if (head) {
+	shared_ptr<LLNode2<ValType>> newhead;
+	shared_ptr<LLNode2<ValType>> oldhead = nullptr;
+	while (head) {
+	    newhead = head;
+	    head = head->_next;
+	    newhead->_next = oldhead;
+	    oldhead = newhead;
+	}
+	head = newhead;
+    }
 }
 
 
