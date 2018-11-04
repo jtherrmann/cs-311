@@ -6,6 +6,11 @@
 // Header for Project 6 code
 
 
+// TODO: address TODO/FIXME in file
+// TODO: read through project description and coding standards; comment
+// sections, classes, functions, etc.
+
+
 #ifndef FILE_DA6_H_INCLUDED
 #define FILE_DA6_H_INCLUDED
 
