@@ -89,52 +89,39 @@ public:
 	return !_head;
     }
 
-    // TODO: factor out search method
+    // TODO: DRY the bodies somehow? (might have been mentioned in lecture
+    // slides early in semester)
     // TODO: param passing method?
     value_type * find(key_type key) {
-	auto _current = _head;
-	while (_current) {
-	    if (_current->_data.first == key)
-		return &(_current->_data.second);
-	    _current = _current->_next;
-	}
+	auto node = lookup(key);
+	if (node)
+	    return &(node->_data.second);
 	return nullptr;
     }
     const value_type * find(key_type key) const {
-	auto _current = _head;
-	while (_current) {
-	    if (_current->_data.first == key)
-		return &(_current->_data.second);
-	    _current = _current->_next;
-	}
+	auto node = lookup(key);
+	if (node)
+	    return &(node->_data.second);
 	return nullptr;
     }
 
-    // TODO: factor out search method
     // TODO: param passing methods?
     void insert(key_type key, value_type value) {
-	auto _current = _head;
-	bool done = false;
-	while (_current && !done) {
-	    if (_current->_data.first == key) {
-		_current->_data.second = value;
-		done = true;
-	    }
-	    _current = _current->_next;
-	}
-	if (!done) {
+	auto node = lookup(key);
+	if (node)
+	    node->_data.second = value;
+	else {
 	    auto newpair = std::make_pair(key, value);
 	    auto newnode = node_type(newpair, _head);
 	    _head = std::make_shared<node_type>(newnode);
 	}
     }
 
-    // TODO: factor out search method
-    // TODO: param passing methods?
+    // TODO: param passing method?
     void erase(key_type key) {
 	// TODO: how to free memory of removed node? or is that handled by
 	// shared_ptr?
-	if (!empty()) {
+	if (_head) {
 	    if (_head->_data.first == key)
 		_head = _head->_next;
 	    else {
@@ -159,6 +146,18 @@ public:
 	}
     }
 
+
+private:
+
+    std::shared_ptr<node_type> lookup(key_type key) const {
+	auto _current = _head;
+	while (_current) {
+	    if (_current->_data.first == key)
+		return _current;
+	    _current = _current->_next;
+	}
+	return _current;
+    }
 
 
 private:
