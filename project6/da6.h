@@ -9,6 +9,9 @@
 // TODO: address TODO/FIXME in file
 // TODO: read through project description and coding standards; comment
 // sections, classes, functions, etc.
+// - exception safety guarantees
+// - exception neutrality
+// - may only forbid VType dctor from throwing
 
 
 #ifndef FILE_DA6_H_INCLUDED
@@ -29,6 +32,7 @@
 // For LLNode2
 
 
+// TODO: comments
 template<typename ValType>
 void reverseList(shared_ptr<LLNode2<ValType>> & head) {
     if (head) {
@@ -45,41 +49,82 @@ void reverseList(shared_ptr<LLNode2<ValType>> & head) {
 }
 
 
-template <typename KType, typename VType>  // TODO: correct?
+// ============================================================================
+// class template ListMap
+// ============================================================================
+
+// class template ListMap
+// Template for an associative linked list.
+//
+// Requirements on Types:
+// - KType and VType meet the type requirements of std::pair and std::make_pair
+//   from <utility>.
+// - KType has a public operator==.
+//
+// Invariants:
+// - _head is empty or points to the first node of a singly linked list of
+//   key-value pairs.
+// - Each node in the list stores a key-value pair whose key type is key_type
+//   and whose value type is value_type.
+// - Each node in the list stores a std::shared_ptr that points to the next
+//   node (if one exists).
+// - Each key in the list appears only once.
+// - 0 <= number of nodes <= maximum value for type size_type.
+template <typename KType, typename VType>
 class ListMap {
 
+// ListMap: Public member types
 public:
 
+    // Type of keys.
     using key_type = KType;
 
+    // Type of associated values.
     using value_type = VType;
 
-    using size_type = std::size_t;
+    // Type of key-value pairs.
+    using kv_type = std::pair<key_type, value_type>;
 
-    // TODO: acceptable solution for kv_type?
-    using kv_type = std::pair<KType, VType>;
-
+    // Type of list nodes.
     using node_type = LLNode2<kv_type>;
 
+    // Type of list size.
+    using size_type = std::size_t;
+
+
+// ListMap: Default ctor and the Big Five
 public:
 
     // Default ctor
+    // Create an empty list.
+    //
+    //
     ListMap()
 	:_head()
     {}
 
     // Dctor
-    // TODO; or default?
-    ~ListMap() {}
+    //
+    //
+    ~ListMap() = default;
 
+    // Copy ctor, move ctor, copy assignment operator, move assignment operator
     ListMap(const ListMap & other) = delete;
     ListMap(ListMap && other) = delete;
     ListMap & operator=(const ListMap & other) = delete;
     ListMap & operator=(ListMap && other) = delete;
 
+
+// ListMap: General public member functions
 public:
 
-    // TODO: confirm not allowed to store size as data member
+    // size
+    // Return the number of nodes in the list.
+    //
+    // Pre:
+    // TODO
+    //
+    //
     size_type size() const {
 	int count = 0;
 	auto current = _head;
@@ -90,13 +135,25 @@ public:
 	return count;
     }
 
+    // empty
+    // Return whether the list is empty.
+    //
+    // Pre:
+    // TODO
+    //
+    //
     bool empty() const {
 	return !_head;
     }
 
+    // find
+    // If the list contains the given key, return a pointer to the associated
+    // value. Otherwise return nullptr.
+    //
     // TODO: DRY the bodies somehow? (might have been mentioned in lecture
     // slides early in semester)
-    // TODO: param passing method?
+    //
+    //
     value_type * find(key_type key) {
 	auto node = lookup(key);
 	if (node)
@@ -110,7 +167,16 @@ public:
 	return nullptr;
     }
 
-    // TODO: param passing methods?
+    // insert
+    // Add a key-value pair to the list. If the list already contains the given
+    // key, overwrite its associated value with the given value.
+    //
+    // Pre:
+    // - size() < maximum value for type size_type.
+    //
+    // TODO: param passing method for value?
+    //
+    //
     void insert(key_type key, value_type value) {
 	auto node = lookup(key);
 	if (node)
@@ -122,10 +188,15 @@ public:
 	}
     }
 
-    // TODO: param passing method?
+    // erase
+    // If the list contains the given key, remove that key-value pair.
+    // Otherwise do nothing.
+    //
+    // Pre:
+    // TODO
+    //
+    //
     void erase(key_type key) {
-	// TODO: how to free memory of removed node? or is that handled by
-	// shared_ptr?
 	if (_head) {
 	    if (_head->_data.first == key)
 		_head = _head->_next;
@@ -142,6 +213,19 @@ public:
 	}
     }
 
+    // traverse
+    // Call the given function on each key-value pair in the list.
+    //
+    // Requirements on Types:
+    // - Func is either a function pointer or an object for which operator() is
+    //   defined.
+    // - Func takes two parameters, the first of type key_type and the second
+    //   of type value_type, and returns nothing.
+    //
+    // Pre:
+    // TODO
+    //
+    //
     template <typename Func>
     void traverse(Func f) {
 	auto current = _head;
@@ -152,8 +236,17 @@ public:
     }
 
 
+// ListMap: Private member functions
 private:
 
+    // lookup
+    // If the list contains the given key, return a pointer to the node that
+    // contains the key-value pair. Otherwise return an empty pointer.
+    //
+    // Pre:
+    // TODO
+    //
+    //
     std::shared_ptr<node_type> lookup(key_type key) const {
 	auto current = _head;
 	while (current) {
@@ -165,9 +258,11 @@ private:
     }
 
 
+// ListMap: Private data members
 private:
 
     std::shared_ptr<node_type> _head;
+
 
 };  // End class template ListMap
 
