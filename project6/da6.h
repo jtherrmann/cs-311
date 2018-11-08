@@ -82,10 +82,10 @@ public:
     // TODO: confirm not allowed to store size as data member
     size_type size() const {
 	int count = 0;
-	auto _current = _head;
-	while (_current) {
+	auto current = _head;
+	while (current) {
 	    ++count;
-	    _current = _current->_next;
+	    current = current->_next;
 	}
 	return count;
     }
@@ -130,13 +130,13 @@ public:
 	    if (_head->_data.first == key)
 		_head = _head->_next;
 	    else {
-	    	auto _current = _head;
-	    	while (_current->_next) {
-	    	    if (_current->_next->_data.first == key) {
-	    	    	_current->_next = _current->_next->_next;
+	    	auto current = _head;
+	    	while (current->_next) {
+	    	    if (current->_next->_data.first == key) {
+	    	    	current->_next = current->_next->_next;
 			break;
 		    }
-		    _current = _current->_next;
+		    current = current->_next;
 	    	}
 	    }
 	}
@@ -144,10 +144,10 @@ public:
 
     template <typename Func>
     void traverse(Func f) {
-	auto _current = _head;
-	while (_current) {
-	    f(_current->_data.first, _current->_data.second);
-	    _current = _current->_next;
+	auto current = _head;
+	while (current) {
+	    f(current->_data.first, current->_data.second);
+	    current = current->_next;
 	}
     }
 
@@ -155,13 +155,13 @@ public:
 private:
 
     std::shared_ptr<node_type> lookup(key_type key) const {
-	auto _current = _head;
-	while (_current) {
-	    if (_current->_data.first == key)
-		return _current;
-	    _current = _current->_next;
+	auto current = _head;
+	while (current) {
+	    if (current->_data.first == key)
+		return current;
+	    current = current->_next;
 	}
-	return _current;
+	return current;
     }
 
 
