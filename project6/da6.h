@@ -9,9 +9,6 @@
 // TODO: address TODO/FIXME in file
 // TODO: read through project description and coding standards; comment
 // sections, classes, functions, etc.
-// - exception safety guarantees
-// - exception neutrality
-// - may only forbid VType dctor from throwing
 
 
 #ifndef FILE_DA6_H_INCLUDED
@@ -32,7 +29,10 @@
 // For LLNode2
 
 
-// TODO: comments
+// TODO: comments (name, description, pre, req on types)
+//
+// TODO: does it need exception safety guarantee?
+// Exception neutral, does not throw additional exceptions.
 template<typename ValType>
 void reverseList(shared_ptr<LLNode2<ValType>> & head) {
     if (head) {
@@ -59,7 +59,11 @@ void reverseList(shared_ptr<LLNode2<ValType>> & head) {
 // Requirements on Types:
 // - KType and VType meet the type requirements of std::pair and std::make_pair
 //   from <utility>.
-// - KType has a public operator==.
+// - KType has a public operator== that offers at least the Strong Guarantee.
+// - KType has a copy ctor that offers at least the Strong Guarentee.
+// - VType has a copy ctor and a copy assignment operator that offer at least
+//   the Strong Guarantee.
+// - KType and VType have non-throwing dctors.
 //
 // Invariants:
 // - _head is empty or points to the first node of a singly linked list of
@@ -98,14 +102,19 @@ public:
     // Default ctor
     // Create an empty list.
     //
+    // No-Throw Guarantee
+    // Exception neutral, does not throw additional exceptions.
     //
-    ListMap()
+    // Note that std::shared_ptr's default ctor does not throw. Source:
+    // https://en.cppreference.com/w/cpp/memory/shared_ptr/shared_ptr
+    ListMap() noexcept
 	:_head()
     {}
 
     // Dctor
     //
-    //
+    // No-Throw Guarantee
+    // Exception neutral, does not throw additional exceptions.
     ~ListMap() = default;
 
     // Copy ctor, move ctor, copy assignment operator, move assignment operator
@@ -121,10 +130,8 @@ public:
     // size
     // Return the number of nodes in the list.
     //
-    // Pre:
-    // TODO
-    //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     size_type size() const {
 	int count = 0;
 	auto current = _head;
@@ -138,10 +145,8 @@ public:
     // empty
     // Return whether the list is empty.
     //
-    // Pre:
-    // TODO
-    //
-    //
+    // No-Throw Guarantee
+    // Exception neutral, does not throw additional exceptions.
     bool empty() const {
 	return !_head;
     }
@@ -153,7 +158,8 @@ public:
     // TODO: DRY the bodies somehow? (might have been mentioned in lecture
     // slides early in semester)
     //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     value_type * find(key_type key) {
 	auto node = lookup(key);
 	if (node)
@@ -174,9 +180,8 @@ public:
     // Pre:
     // - size() < maximum value for type size_type.
     //
-    // TODO: param passing method for value?
-    //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     void insert(key_type key, value_type value) {
 	auto node = lookup(key);
 	if (node)
@@ -195,7 +200,8 @@ public:
     // Pre:
     // TODO
     //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     void erase(key_type key) {
 	if (_head) {
 	    if (_head->_data.first == key)
@@ -221,11 +227,13 @@ public:
     //   defined.
     // - Func takes two parameters, the first of type key_type and the second
     //   of type value_type, and returns nothing.
+    // - Func offers the Strong Guarantee.
     //
     // Pre:
     // TODO
     //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     template <typename Func>
     void traverse(Func f) {
 	auto current = _head;
@@ -246,7 +254,8 @@ private:
     // Pre:
     // TODO
     //
-    //
+    // Strong Guarantee
+    // Exception neutral, does not throw additional exceptions.
     std::shared_ptr<node_type> lookup(key_type key) const {
 	auto current = _head;
 	while (current) {
