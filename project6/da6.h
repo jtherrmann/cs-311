@@ -1,14 +1,9 @@
 // da6.h
 // Jake Herrmann
-// 8 Nov 2018 (TODO)
+// 7 Nov 2018
 //
 // CS 311 Fall 2018
 // Header for Project 6 code
-
-
-// TODO: address TODO/FIXME in file
-// TODO: read through project description and coding standards; comment
-// sections, classes, functions, etc.
 
 
 #ifndef FILE_DA6_H_INCLUDED
@@ -29,9 +24,13 @@
 // For LLNode2
 
 
-// TODO: comments (name, description, pre, req on types)
+// reverseList
+// Reverse a linked list; in-place, linear time, and performs no value type
+// operations.
 //
-// TODO: does it need exception safety guarantee?
+// Requirements on Types:
+// - ValType meets the type requirements of LLNode2.
+//
 // Exception neutral, does not throw additional exceptions.
 template<typename ValType>
 void reverseList(shared_ptr<LLNode2<ValType>> & head) {
@@ -66,12 +65,9 @@ void reverseList(shared_ptr<LLNode2<ValType>> & head) {
 // - KType and VType have non-throwing dctors.
 //
 // Invariants:
-// - _head is empty or points to the first node of a singly linked list of
-//   key-value pairs.
+// - _head is empty or points to an empty-ptr-terminated singly linked list.
 // - Each node in the list stores a key-value pair whose key type is key_type
 //   and whose value type is value_type.
-// - Each node in the list stores a std::shared_ptr that points to the next
-//   node (if one exists).
 // - Each key in the list appears only once.
 // - 0 <= number of nodes <= maximum value for type size_type.
 template <typename KType, typename VType>
@@ -151,12 +147,9 @@ public:
 	return !_head;
     }
 
-    // find
+    // find - non-const & const
     // If the list contains the given key, return a pointer to the associated
     // value. Otherwise return nullptr.
-    //
-    // TODO: DRY the bodies somehow? (might have been mentioned in lecture
-    // slides early in semester)
     //
     // Strong Guarantee
     // Exception neutral, does not throw additional exceptions.
@@ -197,9 +190,6 @@ public:
     // If the list contains the given key, remove that key-value pair.
     // Otherwise do nothing.
     //
-    // Pre:
-    // TODO
-    //
     // Strong Guarantee
     // Exception neutral, does not throw additional exceptions.
     void erase(key_type key) {
@@ -229,9 +219,6 @@ public:
     //   of type value_type, and returns nothing.
     // - Func offers the Strong Guarantee.
     //
-    // Pre:
-    // TODO
-    //
     // Strong Guarantee
     // Exception neutral, does not throw additional exceptions.
     template <typename Func>
@@ -250,9 +237,6 @@ private:
     // lookup
     // If the list contains the given key, return a pointer to the node that
     // contains the key-value pair. Otherwise return an empty pointer.
-    //
-    // Pre:
-    // TODO
     //
     // Strong Guarantee
     // Exception neutral, does not throw additional exceptions.
