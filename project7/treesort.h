@@ -3,13 +3,8 @@
 // 19 Nov 2018
 //
 // CS 311 Fall 2018
-// Header for function template treesort (TODO: and other stuff)
+// Header for Treesort algorithm
 // There is no associated source file.
-
-
-// TODO:
-// - address TODO/FIXME in file
-// - read through code & comments again
 
 
 #ifndef FILE_TREESORT_H_INCLUDED
@@ -108,13 +103,13 @@ void inorder_copy(shared_ptr<BSTNode<ValType>> root, FDIter & iter) {
 //   empty.
 //
 // Requirements on Types:
-// - FDIter has a public copy ctor. (TODO: when is copy ctor called?)
+// - FDIter has a public copy ctor.
 // - FDIter has a public operator!=.
 // - FDIter has a public operator++ (prefix).
+// - Each of the above operators offers the Strong Guarantee.
 // - FDIter meets the FDIter requirements of inorder_copy.
 // - iterator_traits<FDIter>::value_type meets the ValType requirements of
 //   insert and inorder_copy.
-// - Each of the above operators offers the Strong Guarantee.
 //
 // Strong Guarantee
 // Exception neutral, does not throw additional exceptions.
