@@ -1,6 +1,5 @@
 a.out
 catch.hpp
-*_test_main.cpp
-*_test_suites.cpp
+*test*
 llnode2.h
 treesort-dummy.h
