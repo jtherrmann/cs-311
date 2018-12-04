@@ -1,3 +1,11 @@
+// followers.cpp
+// Jake Herrmann
+// 03 Dec 2018
+//
+// CS 311 Fall 2018
+// Source for following-words program
+
+
 #include <fstream>
 using std::ifstream;
 
@@ -16,36 +24,29 @@ using std::set;
 using std:: getline;
 using std::string;
 
-
-// TODO:
-// - address TODO in file
-// - remove sources marked TODO
-// - document
-// - read project description & coding standards
+#include <sys/stat.h>
 
 
-// TODO:
-// https://www.cs.uaf.edu/~chappell/class/2018_fall/cs311/lect/cs311-20181126-table_stl.pdf
-// slide 26
-// - use std::map from <map>
-//   - because keys are unique and sorted by operator<
-// - for each word, if it's not a key in the map, set it to an empty set
-// - for each word, insert the word immediately after it into the first word's
-//   set
-
-
+// following-words set type
+// The set of following words associated with some word.
 using SetType = set<string>;
+
+// following-words map type
+// A map where each key-value pair is a unique word and its associated set of
+// following words.
 using MapType = map<string, SetType>;
 
 
-MapType & make_word_map(const string & filename, MapType & wordmap)
+// make_word_map
+// Populate the given following-words map for the given file. Print an error
+// message and exit if there is an error reading the file.
+void make_word_map(const string & path, MapType & wordmap)
 {
-    // TODO: source: http://www.cplusplus.com/doc/tutorial/files/
     string current_word;
     string next_word;
     ifstream file;
 
-    file.open(filename);
+    file.open(path);
     file >> next_word;
     if (file) {
 	while (true) {
@@ -63,13 +64,17 @@ MapType & make_word_map(const string & filename, MapType & wordmap)
     }
     file.close();
     if (!file.eof()) {
-	cout << "Error reading file '" << filename << "'" << endl;
+	// This is sufficient to handle the majority of error conditions,
+	// including empty or blank user input, names of files that don't
+	// exist, and files without read permissions.
+	cout << "Error reading file '" << path << "'" << endl;
 	exit(1);
     }
-    return wordmap;
 }
 
 
+// print_stats
+// Print statistics for the given following-words map.
 void print_stats(const MapType & wordmap)
 {
     cout << "\nNumber of distinct words: " << wordmap.size() << "\n\n";
@@ -82,21 +87,37 @@ void print_stats(const MapType & wordmap)
 }
 
 
+// is_dir
+// Return true if the given path specifies a directory and false otherwise.
+//
+// adapted from:
+// http://forum.codecall.net/topic/68935-how-to-test-if-file-or-directory/?p=624747
+bool is_dir(const string & path) {
+    struct stat buf;
+    stat(path.c_str(), &buf);
+    return S_ISDIR(buf.st_mode);
+}
+
+
+// main
+// Read a file path from user input. If the path is a directory, print an error
+// message and exit. Otherwise, print the file's following-words statistics.
 int main()
 {
-    // TODO:
-    // - input filename validation
-    //   - trim whitespace from beginnig & end of input filename
-
-    // TODO: source: https://en.cppreference.com/w/cpp/string/basic_string/getline
-
-    string filename;
+    string path;
     MapType wordmap;
 
-    cout << "Enter a filename: ";
-    getline(cin, filename);
+    cout << "Enter a path to a file: ";
+    getline(cin, path);
 
-    make_word_map(filename, wordmap);
+    if (is_dir(path)) {
+	// This error condition won't be detected by make_word_map so we must
+	// check for it here.
+	cout << "'" << path << "' is a directory" << endl;
+	exit(1);
+    }
+
+    make_word_map(path, wordmap);
     print_stats(wordmap);
 
     return 0;
