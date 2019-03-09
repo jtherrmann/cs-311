@@ -1,0 +1,11 @@
+Number of distinct words: 9
+
+ant: bear
+bear: crab duck frog
+crab: ant duck frog
+duck: crab emu
+emu: goat hog
+frog: bear emu frog frog!
+frog!: crab
+goat: frog
+hog:
