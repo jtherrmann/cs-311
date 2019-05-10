@@ -1,3 +1,3 @@
 Jake Herrmann\
-CS 311 Fall 2018\
-Data Structures and Algorithms
+CS 311: Data Structures and Algorithms\
+Fall 2018
